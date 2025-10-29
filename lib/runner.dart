@@ -6,9 +6,9 @@ import 'features/app/app.dart';
 
 /// The main entry point of the application.
 void run() {
-  WidgetsFlutterBinding.ensureInitialized();
   runZonedGuarded(
     () {
+      WidgetsFlutterBinding.ensureInitialized();
       runApp(const FlutterStarterTemplate());
     },
     (error, stackTrace) {
