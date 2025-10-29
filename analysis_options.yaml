@@ -42,6 +42,7 @@ linter:
     - prefer_const_declarations
     - prefer_relative_imports
     - prefer_single_quotes
+    - public_member_api_docs
     - use_super_parameters
     - unnecessary_parenthesis
 
