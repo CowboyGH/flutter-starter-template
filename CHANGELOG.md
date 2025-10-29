@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Implemented base Clean Architecture structure (`core`, `features`, `uikit`) with `data`, `domain`, and `presentation` layers.
 - Added all project dependencies from `pubspec.yaml`.
+- Integrated `GetIt` for dependency injection.
 
 ### Changed
 - Added `public_member_api_docs` rule to `analysis_options.yaml`.
