@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../debug/presentation/debug_screen.dart';
+import '../../core/router/router.dart';
 
 /// The main application widget.
 class FlutterStarterTemplate extends StatelessWidget {
@@ -9,6 +9,6 @@ class FlutterStarterTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: DebugScreen());
+    return MaterialApp.router(routerConfig: router);
   }
 }
