@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integrated `GetIt` for dependency injection.
 - Added `DebugScreen` widget for testing and debugging purposes.
 - Added application router with `GoRouter` and defined route paths for navigation.
+- Integrated `logger` package with `AppLogger` abstraction, DI setup, and global error handling (Flutter & platform-level).
 
 ### Changed
 - Added `public_member_api_docs` rule to `analysis_options.yaml`.

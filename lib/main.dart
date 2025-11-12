@@ -1,3 +1,3 @@
 import 'runner.dart';
 
-void main() => run();
+Future<void> main() async => await run();
