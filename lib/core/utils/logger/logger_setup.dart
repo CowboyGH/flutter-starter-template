@@ -20,6 +20,5 @@ Logger createLogger() {
   return Logger(
     level: isRelease ? Level.warning : Level.debug,
     printer: printer,
-    // TODO: later add custom LogOutput that duplicates in Crashlytics
   );
 }
