@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integrated `Firebase Core` for authentication and analytics features.
 - Integrated `Firebase Crashlytics` for global error handling.
 - Added `AppFailure` base class and `UnknownFailure` implementation for unified domain-level error handling.
+ - Added sealed `Result` abstraction with `Success` and `Failure` implementations, plus `AsyncResult` type alias for standardizing async operation handling.
 
 ### Changed
 - Added `public_member_api_docs` rule to `analysis_options.yaml`.
