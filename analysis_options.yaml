@@ -31,7 +31,6 @@ linter:
   rules:
     # --- Style & Formatting ---
     - always_declare_return_types
-    - always_put_control_body_on_new_line
     - annotate_overrides
     - avoid_print
     - avoid_redundant_argument_values
