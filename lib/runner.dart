@@ -41,8 +41,17 @@ Future<void> run() async {
       runApp(const FlutterStarterTemplate());
     },
     (error, stackTrace) {
-      di<AppLogger>().f('UncaughtZoneError', error, stackTrace);
-      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+      // Fallback handler (without DI)
+      debugPrint('UncaughtZoneError: $error');
+      debugPrintStack(stackTrace: stackTrace);
+
+      try {
+        FirebaseCrashlytics.instance.recordError(error, stackTrace);
+      } catch (e, s) {
+        // In case Firebase/Crashlytics aren't ready yet
+        debugPrint('Error while reporting to Crashlytics: $e');
+        debugPrintStack(stackTrace: s);
+      }
     },
   );
 }
