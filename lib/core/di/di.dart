@@ -1,6 +1,11 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
+import '../utils/analytics/app_analytics.dart';
+import '../utils/analytics/debug_analytics_impl.dart';
+import '../utils/analytics/firebase_analytics_impl.dart';
 import '../utils/logger/app_logger.dart';
 import '../utils/logger/app_logger_impl.dart';
 import '../utils/logger/logger_setup.dart';
@@ -18,4 +23,12 @@ void setupDI() {
 
   di.registerLazySingleton<Logger>(() => logger);
   di.registerLazySingleton<AppLogger>(() => AppLoggerImpl(di<Logger>()));
+
+  // Firebase Analytics
+  di.registerLazySingleton<FirebaseAnalytics>(() => FirebaseAnalytics.instance);
+  di.registerLazySingleton<AppAnalytics>(
+    () => kReleaseMode
+        ? FirebaseAnalyticsImpl(di<FirebaseAnalytics>())
+        : DebugAnalyticsImpl(di<AppLogger>()),
+  );
 }

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `AppFailure` base class and `UnknownFailure` implementation for unified domain-level error handling.
 - Added sealed `Result` abstraction with `Success` and `Failure` implementations, plus `AsyncResult` type alias for standardizing async operation handling.
 - Added DI-independent fallback error handler inside runZonedGuarded to ensure reliable error reporting even if DI or Firebase are not ready.
+- Added unified analytics architecture with `Firebase Analytics` integration, debug logging, and automatic screen view tracking via `AnalyticsRouteObserver`.
 
 ### Changed
 - Added `public_member_api_docs` rule to `analysis_options.yaml`.
