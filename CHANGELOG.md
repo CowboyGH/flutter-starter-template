@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `public_member_api_docs` rule to `analysis_options.yaml`.
 - Extracted main application widget to `app.dart`, added `runner.dart` for app initialization with error handling, and simplified `main.dart`.
 - Removed `always_put_control_body_on_new_line` rule from `analysis_options.yaml`.
+- Streamlined logger registration in dependency injection setup
 
 ### Fixed
 - Moved `WidgetsFlutterBinding.ensureInitialized()` inside `runZonedGuarded` in `runner.dart` to ensure proper app initialization and error handling.

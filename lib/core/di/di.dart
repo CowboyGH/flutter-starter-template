@@ -15,13 +15,8 @@ final di = GetIt.instance;
 
 /// Initializes the application's dependencies using GetIt.
 void setupDI() {
-  // Register your dependencies here, for example:
-  // di.registerLazySingleton<SomeService>(() => SomeServiceImpl());
-
   // Logger
-  final logger = createLogger();
-
-  di.registerLazySingleton<Logger>(() => logger);
+  di.registerLazySingleton<Logger>(() => createLogger());
   di.registerLazySingleton<AppLogger>(() => AppLoggerImpl(di<Logger>()));
 
   // Firebase Analytics
