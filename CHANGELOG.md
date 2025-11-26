@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extracted main application widget to `app.dart`, added `runner.dart` for app initialization with error handling, and simplified `main.dart`.
 - Removed `always_put_control_body_on_new_line` rule from `analysis_options.yaml`.
 - Streamlined logger registration in dependency injection setup
+- Updated Dart SDK requirement to `>=3.10.0` (was `>=3.9.2`)
+- Updated Flutter SDK requirement to `>=3.10.0`
 
 ### Fixed
 - Moved `WidgetsFlutterBinding.ensureInitialized()` inside `runZonedGuarded` in `runner.dart` to ensure proper app initialization and error handling.
