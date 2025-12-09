@@ -62,6 +62,15 @@ unlinked_spec.ds
 # Firebase related
 firebase_options.dart
 
+# Docker related
+*.img
+*.tar
+*.tar.gz
+
+# APK related
+*.apk
+apk-output/
+
 # Symbolication related
 app.*.symbols
 

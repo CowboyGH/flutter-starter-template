@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added DI-independent fallback error handler inside runZonedGuarded to ensure reliable error reporting even if DI or Firebase are not ready.
 - Added unified analytics architecture with `Firebase Analytics` integration, debug logging, and automatic screen view tracking via `AnalyticsRouteObserver`.
 - Added `AppLoggerMixin` for convenient logger access in Bloc/Cubit
+- **CI/CD**: Docker configuration for Android build pipeline
+  - Multi-stage Dockerfile with Flutter 3.38.4 and Android SDK 35
+  - Support for split APK by ABI (armeabi-v7a, arm64-v8a, x86_64)
+  - `.dockerignore` for optimized build context
 
 ### Changed
 
