@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [Unreleased]
+
 ### Added
+
 - Implemented base Clean Architecture structure (`core`, `features`, `uikit`) with `data`, `domain`, and `presentation` layers.
 - Added all project dependencies from `pubspec.yaml`.
 - Integrated `GetIt` for dependency injection.
@@ -24,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `AppLoggerMixin` for convenient logger access in Bloc/Cubit
 
 ### Changed
+
 - Added `public_member_api_docs` rule to `analysis_options.yaml`.
 - Extracted main application widget to `app.dart`, added `runner.dart` for app initialization with error handling, and simplified `main.dart`.
 - Removed `always_put_control_body_on_new_line` rule from `analysis_options.yaml`.
@@ -32,13 +35,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Flutter SDK requirement to `>=3.10.0`
 
 ### Fixed
+
 - Moved `WidgetsFlutterBinding.ensureInitialized()` inside `runZonedGuarded` in `runner.dart` to ensure proper app initialization and error handling.
 - Fixed code generation failure by updating `retrofit_generator` (compatibility with `analyzer` 7.7.1+).
 
 ---
 
 ## [0.1.0] - 2025-10-29
+
 ### Added
+
 - Initial Flutter project created via `flutter create`.
 - Added core documentation files and base configuration.
 

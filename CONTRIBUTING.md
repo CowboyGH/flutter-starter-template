@@ -21,46 +21,53 @@ Please take a few minutes to read through these guidelines before submitting you
 
 1. **Fork** the repository.  
 2. **Clone** your fork locally:
-```bash
-   git clone https://github.com/CowboyGH/flutter-starter-template.git
-   cd <repo-name>
-```
+
+   ```bash
+      git clone https://github.com/CowboyGH/flutter-starter-template.git
+      cd <repo-name>
+   ```
 
 3. Install dependencies:
-```bash
-   flutter pub get
-```
+
+   ```bash
+      flutter pub get
+   ```
 
 4. Create a new branch for your feature or fix:
-```bash
-   git checkout -b feature/my-new-feature
-```
+
+   ```bash
+      git checkout -b feature/my-new-feature
+   ```
 
 ---
 
 ## 🧰 Development Workflow
 
 1. Make sure your Flutter SDK and packages are up to date:
-```bash
-   flutter upgrade
-   flutter pub upgrade
-```
+
+   ```bash
+      flutter upgrade
+      flutter pub upgrade
+   ```
 
 2. Run the project:
-```bash
-   flutter run
-```
+
+   ```bash
+      flutter run
+   ```
 
 3. Before committing, check formatting and analyze code:
-```bash
-   flutter format .
-   flutter analyze
-```
+
+   ```bash
+      flutter format .
+      flutter analyze
+   ```
 
 4. Run unit tests (if any):
-```bash
-   flutter test
-```
+
+   ```bash
+      flutter test
+   ```
 
 ---
 
@@ -77,12 +84,14 @@ Please take a few minutes to read through these guidelines before submitting you
 ## 📝 Commit Guidelines
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/) format:
-```
+
+```text
 <type>(optional scope): <short summary>
 ```
 
 **Example:**
-```
+
+```text
 feat(auth): add user login with token refresh
 fix(router): correct initial route for onboarding
 docs(readme): update setup instructions
@@ -111,6 +120,7 @@ I use a simple branching model:
 - `docs/*` — documentation updates
 
 **Example workflow:**
+
 ```bash
 git checkout -b feature/add-user-profile
 # make changes
