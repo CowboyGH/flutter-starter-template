@@ -148,8 +148,9 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       
-      - name: Create fake firebase_options.dart
+      - name: Create configuration files
         run: |
+          # Create firebase_options.dart
           mkdir -p lib
           cat <<EOF > lib/firebase_options.dart
           import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
@@ -186,6 +187,39 @@ jobs:
               storageBucket: 'fake-bucket',
               iosBundleId: 'fake-bundle-id',
             );
+          }
+          EOF
+               
+          # google-services.json
+          cat <<EOF > android/app/google-services.json
+          {
+            "project_info": {
+              "project_number": "123456789012",
+              "project_id": "fake-project-id",
+              "storage_bucket": "fake-project-id.appspot.com"
+            },
+            "client": [
+              {
+                "client_info": {
+                  "mobilesdk_app_id": "1:123456789012:android:321abc456def7890",
+                  "android_client_info": {
+                    "package_name": "com.flutter.starter.template.flutter_starter_template" 
+                  }
+                },
+                "oauth_client": [],
+                "api_key": [
+                  {
+                    "current_key": "fake-api-key"
+                  }
+                ],
+                "services": {
+                  "appinvite_service": {
+                    "other_platform_oauth_client": []
+                  }
+                }
+              }
+            ],
+            "configuration_version": "1"
           }
           EOF
 
@@ -292,8 +326,9 @@ jobs:
           channel: 'stable'
           cache: true
       
-      - name: Create fake firebase_options.dart
+      - name: Create configuration files
         run: |
+          # Create firebase_options.dart
           mkdir -p lib
           cat <<EOF > lib/firebase_options.dart
           import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
@@ -331,6 +366,40 @@ jobs:
               iosBundleId: 'fake-bundle-id',
             );
           }
+          EOF
+
+          # Create GoogleService-Info.plist
+          cat <<EOF > ios/Runner/GoogleService-Info.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>API_KEY</key>
+            <string>fake-api-key</string>
+            <key>GCM_SENDER_ID</key>
+            <string>123456789012</string>
+            <key>PLIST_VERSION</key>
+            <string>1</string>
+            <key>BUNDLE_ID</key>
+            <string>com.flutter.starter.template.flutterStarterTemplate</string>
+            <key>PROJECT_ID</key>
+            <string>fake-project-id</string>
+            <key>STORAGE_BUCKET</key>
+            <string>fake-project-id.appspot.com</string>
+            <key>IS_ADS_ENABLED</key>
+            <false/>
+            <key>IS_ANALYTICS_ENABLED</key>
+            <false/>
+            <key>IS_APPINVITE_ENABLED</key>
+            <true/>
+            <key>IS_GCM_ENABLED</key>
+            <true/>
+            <key>IS_SIGNIN_ENABLED</key>
+            <true/>
+            <key>GOOGLE_APP_ID</key>
+            <string>1:123456789012:ios:321abc456def7890</string>
+          </dict>
+          </plist>
           EOF
 
       - name: Get dependencies
