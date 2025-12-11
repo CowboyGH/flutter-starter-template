@@ -117,10 +117,6 @@ jobs:
     needs: analyze
     timeout-minutes: 60
     
-    outputs:
-      image-tag: ${{ steps.meta.outputs.tags }}
-      image-digest: ${{ steps.build.outputs.digest }}
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
