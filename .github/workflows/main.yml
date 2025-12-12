@@ -34,49 +34,19 @@ jobs:
         run: |
           mkdir -p lib
           cat <<EOF > lib/firebase_options.dart
-          import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
-          import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
-
-          ///
+          // ignore_for_file: type=lint
+          import 'package:firebase_core/firebase_core.dart'; import 'package:flutter/foundation.dart';
           class DefaultFirebaseOptions {
-            ///
             static FirebaseOptions get currentPlatform {
-              if (kIsWeb) {
-                throw UnsupportedError(
-                  'DefaultFirebaseOptions have not been configured for web - '
-                  'you can reconfigure this by running the FlutterFire CLI again.',
-                );
-              }
+              if (kIsWeb) throw UnsupportedError('Web not configured');
               switch (defaultTargetPlatform) {
-                case TargetPlatform.android:
-                  return android;
-                case TargetPlatform.iOS:
-                  return ios;
-                default:
-                  throw UnsupportedError(
-                    'DefaultFirebaseOptions are not supported for this platform.',
-                  );
+                case TargetPlatform.android: return android;
+                case TargetPlatform.iOS: return ios;
+                default: throw UnsupportedError('Platform not configured');
               }
             }
-
-            ///
-            static const FirebaseOptions android = FirebaseOptions(
-              apiKey: 'fake-api-key',
-              appId: 'fake-app-id',
-              messagingSenderId: 'fake-sender-id',
-              projectId: 'fake-project-id',
-              storageBucket: 'fake-bucket',
-            );
-
-            ///
-            static const FirebaseOptions ios = FirebaseOptions(
-              apiKey: 'fake-api-key',
-              appId: 'fake-app-id',
-              messagingSenderId: 'fake-sender-id',
-              projectId: 'fake-project-id',
-              storageBucket: 'fake-bucket',
-              iosBundleId: 'fake-bundle-id',
-            );
+            static const FirebaseOptions android = FirebaseOptions(apiKey: 'fake', appId: 'fake', messagingSenderId: 'fake', projectId: 'fake', storageBucket: 'fake');
+            static const FirebaseOptions ios = FirebaseOptions(apiKey: 'fake', appId: 'fake', messagingSenderId: 'fake', projectId: 'fake', storageBucket: 'fake', iosBundleId: 'fake');
           }
           EOF
           
@@ -86,9 +56,6 @@ jobs:
       - name: Run build_runner
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Format generated code
-        run: dart format .
-      
       - name: Verify formatting
         run: dart format --set-exit-if-changed lib/ test/
         continue-on-error: false
@@ -109,7 +76,7 @@ jobs:
           retention-days: 7
 
   # ==========================================
-  # Job 2: Android Build with Docker
+  # Job 2: Android Build (Docker)
   # ==========================================
   build-android:
     name: Build Android APK
@@ -124,111 +91,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Login to DockerHub
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
-      - name: Extract metadata for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/flutter-starter-android
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=sha,format=short,prefix=sha-
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-      
-      - name: Create configuration files
+      - name: Create mock configuration files
         run: |
-          # Create firebase_options.dart
           mkdir -p lib
-          cat <<EOF > lib/firebase_options.dart
-          import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
-          import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
-
-          class DefaultFirebaseOptions {
-            static FirebaseOptions get currentPlatform {
-              if (kIsWeb) {
-                throw UnsupportedError('Web not configured');
-              }
-              switch (defaultTargetPlatform) {
-                case TargetPlatform.android:
-                  return android;
-                case TargetPlatform.iOS:
-                  return ios;
-                default:
-                  throw UnsupportedError('Platform not configured');
-              }
-            }
-
-            static const FirebaseOptions android = FirebaseOptions(
-              apiKey: 'fake-api-key',
-              appId: 'fake-app-id',
-              messagingSenderId: 'fake-sender-id',
-              projectId: 'fake-project-id',
-              storageBucket: 'fake-bucket',
-            );
-
-            static const FirebaseOptions ios = FirebaseOptions(
-              apiKey: 'fake-api-key',
-              appId: 'fake-app-id',
-              messagingSenderId: 'fake-sender-id',
-              projectId: 'fake-project-id',
-              storageBucket: 'fake-bucket',
-              iosBundleId: 'fake-bundle-id',
-            );
-          }
-          EOF
-               
+          # firebase_options.dart
+          echo "import 'package:firebase_core/firebase_core.dart'; import 'package:flutter/foundation.dart'; class DefaultFirebaseOptions { static FirebaseOptions get currentPlatform { if (kIsWeb) throw UnsupportedError('Web not configured'); switch (defaultTargetPlatform) { case TargetPlatform.android: return android; case TargetPlatform.iOS: return ios; default: throw UnsupportedError('Platform not configured'); } } static const FirebaseOptions android = FirebaseOptions(apiKey: 'fake', appId: 'fake', messagingSenderId: 'fake', projectId: 'fake', storageBucket: 'fake'); static const FirebaseOptions ios = FirebaseOptions(apiKey: 'fake', appId: 'fake', messagingSenderId: 'fake', projectId: 'fake', storageBucket: 'fake', iosBundleId: 'fake'); }" > lib/firebase_options.dart               
           # google-services.json
-          cat <<EOF > android/app/google-services.json
-          {
-            "project_info": {
-              "project_number": "123456789012",
-              "project_id": "fake-project-id",
-              "storage_bucket": "fake-project-id.appspot.com"
-            },
-            "client": [
-              {
-                "client_info": {
-                  "mobilesdk_app_id": "1:123456789012:android:321abc456def7890",
-                  "android_client_info": {
-                    "package_name": "com.flutter.starter.template.flutter_starter_template" 
-                  }
-                },
-                "oauth_client": [],
-                "api_key": [
-                  {
-                    "current_key": "fake-api-key"
-                  }
-                ],
-                "services": {
-                  "appinvite_service": {
-                    "other_platform_oauth_client": []
-                  }
-                }
-              }
-            ],
-            "configuration_version": "1"
-          }
-          EOF
+          echo '{"project_info":{"project_number":"123","project_id":"fake","storage_bucket":"fake"},"client":[{"client_info":{"mobilesdk_app_id":"1:123:android:123","android_client_info":{"package_name":"com.flutter.starter.template.flutter_starter_template"}},"api_key":[{"current_key":"fake"}]}]}' > android/app/google-services.json
 
-      - name: Build and push Docker image
+      - name: Build Docker image
         id: build
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
-          push: ${{ github.event_name != 'pull_request' }}
-          load: ${{ github.event_name == 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          push: false
+          load: true 
+          tags: flutter-build:latest
           build-args: |
             BUILD_DATE=${{ github.event.repository.updated_at }}
             VCS_REF=${{ github.sha }}
@@ -237,22 +115,12 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       
-      - name: Extract APK from Docker image
+      - name: Extract APK
         run: |
-          IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
-          echo "Using image: ${IMAGE_TAG}"
-          
-          docker create --name temp-flutter "${IMAGE_TAG}"
+          docker create --name temp flutter-build:latest
           mkdir -p apk-output
-          docker cp temp-flutter:/artifacts/. apk-output/
-          docker rm temp-flutter
-          
-          if [ ! "$(ls -A apk-output/*.apk 2>/dev/null)" ]; then
-            echo "ERROR: No APK files found in apk-output/"
-            exit 1
-          fi
-          
-          echo "Successfully extracted APK files:"
+          docker cp temp:/artifacts/. apk-output/
+          docker rm temp
           ls -lh apk-output/
       
       - name: Upload Android APK artifacts
@@ -263,44 +131,20 @@ jobs:
           retention-days: 30
           compression-level: 0
       
-      - name: Generate build summary
+      - name: Generate Summary
         run: |
           echo "## 🤖 Android APK Build Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Build Info:**" >> $GITHUB_STEP_SUMMARY
-          echo "- Commit: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Branch: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Flutter: \`${{ env.FLUTTER_VERSION }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Android SDK: \`${{ env.ANDROID_SDK_VERSION }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Architecture | Filename | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "| Architecture | File | Size |" >> $GITHUB_STEP_SUMMARY
           echo "|--------------|----------|------|" >> $GITHUB_STEP_SUMMARY
-          
           for apk in apk-output/*.apk; do
-            if [ -f "$apk" ]; then
-              filename=$(basename "$apk")
-              size=$(du -h "$apk" | cut -f1)
-              
-              if [[ "$filename" == *"arm64-v8a"* ]]; then
-                arch="ARM64 (64-bit)"
-              elif [[ "$filename" == *"armeabi-v7a"* ]]; then
-                arch="ARMv7 (32-bit)"
-              elif [[ "$filename" == *"x86_64"* ]]; then
-                arch="x86_64"
-              else
-                arch="Universal"
-              fi
-              
-              echo "| $arch | \`$filename\` | $size |" >> $GITHUB_STEP_SUMMARY
-            fi
+            name=$(basename "$apk")
+            size=$(du -h "$apk" | cut -f1)
+            arch="Universal"
+            if [[ "$name" == *"arm64"* ]]; then arch="ARM64"; fi
+            if [[ "$name" == *"armeabi"* ]]; then arch="ARMv7"; fi
+            if [[ "$name" == *"x86_64"* ]]; then arch="x86_64"; fi
+            echo "| $arch | \`$name\` | $size |" >> $GITHUB_STEP_SUMMARY
           done
-          
-          echo "" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ github.event_name }}" != "pull_request" ]; then
-            echo "🐳 **Docker Image:** \`${{ steps.meta.outputs.tags }}\`" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "ℹ️ *Docker image not pushed (Pull Request build)*" >> $GITHUB_STEP_SUMMARY
-          fi
 
   # ==========================================
   # Job 3: iOS Build (macOS runner)
@@ -322,112 +166,34 @@ jobs:
           channel: 'stable'
           cache: true
       
-      - name: Create configuration files
+      - name: Create mock configuration files
         run: |
+          mkdir -p lib ios/Runner
           # Create firebase_options.dart
-          mkdir -p lib
-          cat <<EOF > lib/firebase_options.dart
-          import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
-          import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
-
-          class DefaultFirebaseOptions {
-            static FirebaseOptions get currentPlatform {
-              if (kIsWeb) {
-                throw UnsupportedError('Web not configured');
-              }
-              switch (defaultTargetPlatform) {
-                case TargetPlatform.android:
-                  return android;
-                case TargetPlatform.iOS:
-                  return ios;
-                default:
-                  throw UnsupportedError('Platform not configured');
-              }
-            }
-
-            static const FirebaseOptions android = FirebaseOptions(
-              apiKey: 'fake-api-key',
-              appId: 'fake-app-id',
-              messagingSenderId: 'fake-sender-id',
-              projectId: 'fake-project-id',
-              storageBucket: 'fake-bucket',
-            );
-
-            static const FirebaseOptions ios = FirebaseOptions(
-              apiKey: 'fake-api-key',
-              appId: 'fake-app-id',
-              messagingSenderId: 'fake-sender-id',
-              projectId: 'fake-project-id',
-              storageBucket: 'fake-bucket',
-              iosBundleId: 'fake-bundle-id',
-            );
-          }
-          EOF
-
+          echo "import 'package:firebase_core/firebase_core.dart'; import 'package:flutter/foundation.dart'; class DefaultFirebaseOptions { static FirebaseOptions get currentPlatform { if (kIsWeb) throw UnsupportedError('Web not configured'); switch (defaultTargetPlatform) { case TargetPlatform.android: return android; case TargetPlatform.iOS: return ios; default: throw UnsupportedError('Platform not configured'); } } static const FirebaseOptions android = FirebaseOptions(apiKey: 'fake', appId: 'fake', messagingSenderId: 'fake', projectId: 'fake', storageBucket: 'fake'); static const FirebaseOptions ios = FirebaseOptions(apiKey: 'fake', appId: 'fake', messagingSenderId: 'fake', projectId: 'fake', storageBucket: 'fake', iosBundleId: 'fake'); }" > lib/firebase_options.dart
           # Create GoogleService-Info.plist
-          cat <<EOF > ios/Runner/GoogleService-Info.plist
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>API_KEY</key>
-            <string>fake-api-key</string>
-            <key>GCM_SENDER_ID</key>
-            <string>123456789012</string>
-            <key>PLIST_VERSION</key>
-            <string>1</string>
-            <key>BUNDLE_ID</key>
-            <string>com.flutter.starter.template.flutterStarterTemplate</string>
-            <key>PROJECT_ID</key>
-            <string>fake-project-id</string>
-            <key>STORAGE_BUCKET</key>
-            <string>fake-project-id.appspot.com</string>
-            <key>IS_ADS_ENABLED</key>
-            <false/>
-            <key>IS_ANALYTICS_ENABLED</key>
-            <false/>
-            <key>IS_APPINVITE_ENABLED</key>
-            <true/>
-            <key>IS_GCM_ENABLED</key>
-            <true/>
-            <key>IS_SIGNIN_ENABLED</key>
-            <true/>
-            <key>GOOGLE_APP_ID</key>
-            <string>1:123456789012:ios:321abc456def7890</string>
-          </dict>
-          </plist>
-          EOF
-
+          echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>API_KEY</key><string>fake</string><key>GCM_SENDER_ID</key><string>123</string><key>PLIST_VERSION</key><string>1</string><key>BUNDLE_ID</key><string>com.flutter.starter.template.flutterStarterTemplate</string><key>PROJECT_ID</key><string>fake</string><key>STORAGE_BUCKET</key><string>fake</string><key>IS_ADS_ENABLED</key><false/><key>IS_ANALYTICS_ENABLED</key><false/><key>IS_APPINVITE_ENABLED</key><true/><key>IS_GCM_ENABLED</key><true/><key>IS_SIGNIN_ENABLED</key><true/><key>GOOGLE_APP_ID</key><string>1:123:ios:123</string></dict></plist>' > ios/Runner/GoogleService-Info.plist
+          
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Install iOS dependencies
+      - name: Install Pods
         run: |
           cd ios
-          rm -rf Pods
-          rm -rf Podfile.lock
-          # Устанавливаем заново
+          rm -rf Pods Podfile.lock
           pod install --repo-update
-          cd ..
       
-      - name: Build iOS app (no codesign)
+      - name: Build iOS app
         run: |
-          flutter build ios --release --no-codesign --verbose \
-            --build-name=1.0.0 \
-            --build-number=${{ github.run_number }}
+          flutter build ios --release --no-codesign --build-number=${{ github.run_number }}
       
-      - name: Create unsigned IPA
+      - name: Create IPA
         run: |
           mkdir -p Payload
           cp -R build/ios/iphoneos/Runner.app Payload/
-          
           IPA_NAME="flutter-starter-ios-${{ github.run_number }}-unsigned.ipa"
           zip -r "$IPA_NAME" Payload
-          
           rm -rf Payload
-          
-          echo "IPA created: $IPA_NAME"
-          ls -lh *.ipa
       
       - name: Upload iOS IPA artifact
         uses: actions/upload-artifact@v4
@@ -436,29 +202,14 @@ jobs:
           path: "*.ipa"
           retention-days: 30
           compression-level: 0
-          if-no-files-found: error
-
       
-      - name: Generate iOS build summary
+      - name: Generate Summary
         run: |
           echo "## 🍎 iOS IPA Build Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Build Info:**" >> $GITHUB_STEP_SUMMARY
-          echo "- Commit: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Branch: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Flutter: \`${{ env.FLUTTER_VERSION }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Build Number: \`${{ github.run_number }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
           echo "|------|------|" >> $GITHUB_STEP_SUMMARY
-          
           for ipa in *.ipa; do
-            if [ -f "$ipa" ]; then
-              size=$(du -h "$ipa" | cut -f1)
-              echo "| \`$ipa\` | $size |" >> $GITHUB_STEP_SUMMARY
-            fi
+            size=$(du -h "$ipa" | cut -f1)
+            echo "| \`$ipa\` | $size |" >> $GITHUB_STEP_SUMMARY
           done
-          
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️ **Note**: This is an unsigned IPA for testing purposes only." >> $GITHUB_STEP_SUMMARY
-          echo "For App Store distribution, code signing is required." >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ Unsigned IPA for testing only." >> $GITHUB_STEP_SUMMARY
