@@ -2,7 +2,7 @@ import '../logger/app_logger.dart';
 import 'app_analytics.dart';
 
 /// Implementation of [AppAnalytics].
-class DebugAnalyticsImpl implements AppAnalytics {
+final class DebugAnalyticsImpl implements AppAnalytics {
   final AppLogger _logger;
 
   /// Creates an instance of [DebugAnalyticsImpl].

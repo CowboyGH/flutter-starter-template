@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'app_logger.dart';
 
 /// Implementation of [AppLogger].
-class AppLoggerImpl implements AppLogger {
+final class AppLoggerImpl implements AppLogger {
   final Logger _logger;
 
   /// Creates an instance of [AppLoggerImpl] with the provided [Logger].

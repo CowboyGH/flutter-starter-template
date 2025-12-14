@@ -3,7 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'app_analytics.dart';
 
 /// Implementation of [AppAnalytics].
-class FirebaseAnalyticsImpl implements AppAnalytics {
+final class FirebaseAnalyticsImpl implements AppAnalytics {
   final FirebaseAnalytics _analytics;
 
   /// Creates an instance of [FirebaseAnalyticsImpl].

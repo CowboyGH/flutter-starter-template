@@ -1,5 +1,5 @@
 /// Abstract class for app analytics functionality.
-abstract class AppAnalytics {
+abstract interface class AppAnalytics {
   /// Logs an event with the given name and parameters.
   Future<void> logEvent(String name, {Map<String, Object>? parameters});
 

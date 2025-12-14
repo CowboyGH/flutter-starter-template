@@ -1,5 +1,5 @@
 /// Abstract class for application logging.
-abstract class AppLogger {
+abstract interface class AppLogger {
   /// Log a message at trace level.
   void t(String message, [Object? error, StackTrace? stackTrace]);
 
