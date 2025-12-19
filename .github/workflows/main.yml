@@ -90,6 +90,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Free disk space
+        uses: endersonmenezes/free-disk-space@v2
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

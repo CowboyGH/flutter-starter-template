@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `.dockerignore` for optimized build context
   - GitHub Actions workflow: code analysis, Android (Docker + DockerHub), iOS (macOS runner)
   - Automated quality checks, artifact uploads, and build summaries
+- Added `NetworkService` for monitoring network availability with `connectivity_plus` integration and unit tests.
 
 ### Changed
 
