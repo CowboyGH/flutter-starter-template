@@ -1,8 +1,11 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
+import '../services/network/network_service.dart';
+import '../services/network/network_service_impl.dart';
 import '../utils/analytics/app_analytics.dart';
 import '../utils/analytics/debug_analytics_impl.dart';
 import '../utils/analytics/firebase_analytics_impl.dart';
@@ -25,5 +28,12 @@ void setupDI() {
     () => kReleaseMode
         ? FirebaseAnalyticsImpl(di<FirebaseAnalytics>())
         : DebugAnalyticsImpl(di<AppLogger>()),
+  );
+
+  /// Connectivity
+  di.registerLazySingleton<Connectivity>(() => Connectivity());
+  di.registerLazySingleton<NetworkService>(
+    () => NetworkServiceImpl(di<Connectivity>()),
+    dispose: (param) => param.dispose(),
   );
 }
