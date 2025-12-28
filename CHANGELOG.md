@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `AuthFailureMapper` to convert `FirebaseAuthException` to `AuthFailure`.
 - Added `UserMapper` to convert Firebase `User` to domain `User`.
 - Added `AuthRepositoryImpl` implementation using Firebase Authentication.
+- Added unit tests for `AuthRepositoryImpl` (success, Firebase exceptions, unexpected errors, auth state stream).
 
 ### Changed
 
