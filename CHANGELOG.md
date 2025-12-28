@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added typed authentication failures (`AuthFailure` hierarchy, including `UnknownAuthFailure`).
 - Added `AuthFailureMapper` to convert `FirebaseAuthException` to `AuthFailure`.
 - Added `UserMapper` to convert Firebase `User` to domain `User`.
+- Added `AuthRepositoryImpl` implementation using Firebase Authentication.
 
 ### Changed
 
