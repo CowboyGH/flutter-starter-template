@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Changed `AppFailure` constructor: `message` is now a positional parameter (API change).
+- Removed `AsyncResult<T>` type alias (deleted `async_result.dart`).
+
+### Fixed
+
+- Updated `AppFailure` constructor to match new `AppFailure` signature.
+
 ## [0.2.0] - 2025-12-20
 
 ### Added
