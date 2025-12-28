@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `User` entity for representing authenticated user data.
+- Added `AuthRepository` interface defining contract for authentication operations.
+
 ### Changed
 
 - Changed `AppFailure` constructor: `message` is now a positional parameter (API change).
