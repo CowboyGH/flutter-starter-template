@@ -299,9 +299,11 @@ void main() {
         when(mockAuth.signOut()).thenAnswer((_) async {});
 
         // Act
-        await repository.signOut();
+        final result = await repository.signOut();
 
         // Assert
+        expect(result.isSuccess, true);
+
         verify(mockAuth.signOut()).called(1);
         verifyNoMoreInteractions(mockAuth);
       });
@@ -376,6 +378,9 @@ void main() {
         final user = users.first!;
         expect(user.uid, uid);
         expect(user.email, email);
+
+        verify(mockAuth.authStateChanges()).called(1);
+        verifyNoMoreInteractions(mockAuth);
       });
 
       test('should emit null when Firebase user is null', () async {
@@ -397,6 +402,9 @@ void main() {
         // Assert
         final user = users.first;
         expect(user, null);
+
+        verify(mockAuth.authStateChanges()).called(1);
+        verifyNoMoreInteractions(mockAuth);
       });
 
       test('should emit sequence of auth state changes', () async {
@@ -431,6 +439,9 @@ void main() {
         expect(user.email, email);
 
         expect(users.last, null);
+
+        verify(mockAuth.authStateChanges()).called(1);
+        verifyNoMoreInteractions(mockAuth);
       });
     });
   });
