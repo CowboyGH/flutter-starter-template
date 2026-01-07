@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/di/di.dart';
 import '../../core/router/router.dart';
+import '../auth/presentation/bloc/auth_bloc.dart';
 
 /// The main application widget.
 class FlutterStarterTemplate extends StatelessWidget {
@@ -9,6 +12,9 @@ class FlutterStarterTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: router);
+    return BlocProvider(
+      create: (context) => di<AuthBloc>(),
+      child: MaterialApp.router(routerConfig: router),
+    );
   }
 }
