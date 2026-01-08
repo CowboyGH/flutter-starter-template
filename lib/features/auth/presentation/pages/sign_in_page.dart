@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/auth_bloc.dart';
+import '../mappers/auth_failure_l10n_mapper.dart';
 
 /// A page that allows users to sign in or sign up.
 class SignInPage extends StatefulWidget {
@@ -44,7 +45,7 @@ class _SignInPageState extends State<SignInPage> {
                 authError: (failure) => ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Center(
-                      child: Text(failure.toString()),
+                      child: Text(failure.toMessage(context)),
                     ),
                   ),
                 ),
