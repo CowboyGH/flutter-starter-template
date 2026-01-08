@@ -4,7 +4,7 @@ import '../../../../core/failures/feature/auth/auth_failure.dart';
 
 /// Extension for converting [FirebaseAuthException] to domain [AuthFailure].
 extension AuthFailureMapper on FirebaseAuthException {
-  /// Converts Firebase authentication exception to application-specific [AuthFailure].
+  /// Converts [FirebaseAuthException] to domain [AuthFailure].
   ///
   /// Returns a specific [AuthFailure] subclass based on the Firebase error code,
   /// or [UnknownAuthFailure] for unmapped error codes.

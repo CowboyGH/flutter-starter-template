@@ -3,12 +3,6 @@ import '../../../../core/result/result.dart';
 import '../entities/user.dart';
 
 /// Repository interface for authentication operations.
-///
-/// Defines the contract for authentication actions (sign in, sign up, sign out)
-/// and authentication state observation.
-///
-/// All methods return [Result] type for functional error handling, allowing
-/// the presentation layer to handle success and failure cases explicitly.
 abstract interface class AuthRepository {
   /// Signs in a user with email and password.
   ///

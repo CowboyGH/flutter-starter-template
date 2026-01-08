@@ -9,11 +9,6 @@ import '../mappers/auth_failure_mapper.dart';
 import '../mappers/user_to_entity_mapper.dart';
 
 /// Implementation of [AuthRepository] using Firebase Authentication.
-///
-/// This class handles authentication operations (sign in, sign up, sign out)
-/// and converts Firebase-specific errors to domain [AuthFailure] types.
-///
-/// All operations are logged using [AppLogger] for debugging and monitoring.
 class AuthRepositoryImpl implements AuthRepository {
   /// Logger for tracking authentication operations and errors.
   final AppLogger _logger;
@@ -24,11 +19,7 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Creates an instance of [AuthRepositoryImpl].
   AuthRepositoryImpl(this._logger, this._auth);
 
-  /// Validates the provided credentials and returns a [Result] containing either
-  /// a [User] on success or an [AuthFailure] on failure.
-  ///
-  /// This is a private helper method used internally by the authentication
-  /// repository to verify user credentials before processing login or
+  /// Validates the provided credentials before processing login or
   /// registration requests.
   ///
   /// Returns:

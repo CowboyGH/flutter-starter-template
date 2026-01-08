@@ -34,7 +34,7 @@ void setupDI() {
         : DebugAnalyticsImpl(di<AppLogger>()),
   );
 
-  // Firebase Authentication
+  // Authentication
   di.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   di.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(di<AppLogger>(), di<FirebaseAuth>()),
