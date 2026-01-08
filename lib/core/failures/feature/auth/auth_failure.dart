@@ -13,7 +13,7 @@ sealed class AuthFailure extends AppFailure {
   });
 }
 
-///
+/// Invalid credential error.
 final class InvalidCredentialFailure extends AuthFailure {
   @override
   String get code => 'invalid-credential';
@@ -25,7 +25,7 @@ final class InvalidCredentialFailure extends AuthFailure {
   }) : super('');
 }
 
-///
+/// Weak password error.
 final class WeakPasswordFailure extends AuthFailure {
   @override
   String get code => 'weak-password';
@@ -37,7 +37,7 @@ final class WeakPasswordFailure extends AuthFailure {
   }) : super('');
 }
 
-///
+/// Wrong password error.
 final class WrongPasswordFailure extends AuthFailure {
   @override
   String get code => 'wrong-password';
@@ -49,7 +49,7 @@ final class WrongPasswordFailure extends AuthFailure {
   }) : super('');
 }
 
-///
+/// Invalid email error.
 final class InvalidEmailFailure extends AuthFailure {
   @override
   String get code => 'invalid-email';
@@ -61,8 +61,7 @@ final class InvalidEmailFailure extends AuthFailure {
   }) : super('');
 }
 
-///
-/// IMPORTANT: WE DON'T NEED TO NOTIFY USER THAT ACCOUNT WITH THIS EMAIL IS IN OUR DATABASE
+/// Email already in use error.
 final class EmailAlreadyInUseFailure extends AuthFailure {
   @override
   String get code => 'email-already-in-use';
@@ -74,7 +73,7 @@ final class EmailAlreadyInUseFailure extends AuthFailure {
   }) : super('');
 }
 
-///
+/// User disabled error.
 final class UserDisabledFailure extends AuthFailure {
   @override
   String get code => 'user-disabled';
@@ -86,7 +85,7 @@ final class UserDisabledFailure extends AuthFailure {
   }) : super('');
 }
 
-///
+/// User token expired error.
 final class UserTokenExpiredFailure extends AuthFailure {
   @override
   String get code => 'user-token-expired';
@@ -98,7 +97,7 @@ final class UserTokenExpiredFailure extends AuthFailure {
   }) : super('');
 }
 
-///
+/// User not found error.
 final class UserNotFoundFailure extends AuthFailure {
   @override
   String get code => 'user-not-found';
@@ -110,7 +109,7 @@ final class UserNotFoundFailure extends AuthFailure {
   }) : super('');
 }
 
-///
+/// Operation not allowed error.
 final class OperationNotAllowed extends AuthFailure {
   @override
   String get code => 'operation-not-allowed';
@@ -122,7 +121,7 @@ final class OperationNotAllowed extends AuthFailure {
   }) : super('');
 }
 
-///
+/// Too many requests error.
 final class TooManyRequestsFailure extends AuthFailure {
   @override
   String get code => 'too-many-requests';
@@ -134,7 +133,7 @@ final class TooManyRequestsFailure extends AuthFailure {
   }) : super('');
 }
 
-///
+/// Network request failed error.
 final class NetworkRequestFailedFailure extends AuthFailure {
   @override
   String get code => 'network-request-failed';
@@ -146,7 +145,7 @@ final class NetworkRequestFailedFailure extends AuthFailure {
   }) : super('');
 }
 
-///
+/// Unknown authentication error.
 final class UnknownAuthFailure extends AuthFailure {
   @override
   final String code;
