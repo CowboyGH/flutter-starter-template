@@ -18,15 +18,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `UserMapper` to convert Firebase `User` to domain `User`.
 - Added `AuthRepositoryImpl` implementation using Firebase Authentication.
 - Added unit tests for `AuthRepositoryImpl` (success, Firebase exceptions, unexpected errors, auth state stream).
+- Added `AuthBloc` for authentication events/state handling.
+- Added unit tests for `AuthBloc`.
+- Added email/password auth UI (`SignInPage`) with sign in / sign up flow.
+- Added `DebugScreen` sign out action for quick manual verification.
+- Added auth-aware routing with GoRouter redirect (`/auth/*` is public, other routes require authentication).
+- Added localized authentication failure messages (ARB + `AuthFailure` → l10n mapper).
 
 ### Changed
 
 - Changed `AppFailure` constructor: `message` is now a positional parameter (API change).
+- Updated `AppFailure` constructor to match new `AppFailure` signature.
 - Removed `AsyncResult<T>` type alias (deleted `async_result.dart`).
+- Enhanced `AuthRepositoryImpl` tests: added sign out and `authStateChanges` verifications.
+- Updated `.gitignore` to exclude generated `*.freezed.dart` files (Build Runner output).
+- Updated auth route paths to use `/auth/*` prefix.
+- Improved authentication failure documentation/comments.
+- Removed unnecessary empty `.gitkeep` files.
+- Updated Firebase dependencies to latest versions.
 
 ### Fixed
 
-- Updated `AppFailure` constructor to match new `AppFailure` signature.
+- Fixed CI failing due to missing generated Freezed files by running `build_runner` code generation in CI/Dockerfile.
 
 ## [0.2.0] - 2025-12-20
 
