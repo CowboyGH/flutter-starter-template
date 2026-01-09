@@ -18,7 +18,7 @@ final class InvalidCredentialFailure extends AuthFailure {
   @override
   String get code => 'invalid-credential';
 
-  ///
+  /// Creates an instance of [InvalidCredentialFailure].
   const InvalidCredentialFailure({
     super.parentException,
     super.stackTrace,
@@ -30,7 +30,7 @@ final class WeakPasswordFailure extends AuthFailure {
   @override
   String get code => 'weak-password';
 
-  ///
+  /// Creates an instance of [WeakPasswordFailure].
   const WeakPasswordFailure({
     super.parentException,
     super.stackTrace,
@@ -42,7 +42,7 @@ final class WrongPasswordFailure extends AuthFailure {
   @override
   String get code => 'wrong-password';
 
-  ///
+  /// Creates an instance of [WrongPasswordFailure].
   const WrongPasswordFailure({
     super.parentException,
     super.stackTrace,
@@ -54,7 +54,7 @@ final class InvalidEmailFailure extends AuthFailure {
   @override
   String get code => 'invalid-email';
 
-  ///
+  /// Creates an instance of [InvalidEmailFailure].
   const InvalidEmailFailure({
     super.parentException,
     super.stackTrace,
@@ -66,7 +66,7 @@ final class EmailAlreadyInUseFailure extends AuthFailure {
   @override
   String get code => 'email-already-in-use';
 
-  ///
+  /// Creates an instance of [EmailAlreadyInUseFailure].
   const EmailAlreadyInUseFailure({
     super.parentException,
     super.stackTrace,
@@ -78,7 +78,7 @@ final class UserDisabledFailure extends AuthFailure {
   @override
   String get code => 'user-disabled';
 
-  ///
+  /// Creates an instance of [UserDisabledFailure].
   const UserDisabledFailure({
     super.parentException,
     super.stackTrace,
@@ -90,7 +90,7 @@ final class UserTokenExpiredFailure extends AuthFailure {
   @override
   String get code => 'user-token-expired';
 
-  ///
+  /// Creates an instance of [UserTokenExpiredFailure].
   const UserTokenExpiredFailure({
     super.parentException,
     super.stackTrace,
@@ -102,7 +102,7 @@ final class UserNotFoundFailure extends AuthFailure {
   @override
   String get code => 'user-not-found';
 
-  ///
+  /// Creates an instance of [UserNotFoundFailure].
   const UserNotFoundFailure({
     super.parentException,
     super.stackTrace,
@@ -114,7 +114,7 @@ final class OperationNotAllowed extends AuthFailure {
   @override
   String get code => 'operation-not-allowed';
 
-  ///
+  /// Creates an instance of [OperationNotAllowed].
   const OperationNotAllowed({
     super.parentException,
     super.stackTrace,
@@ -126,7 +126,7 @@ final class TooManyRequestsFailure extends AuthFailure {
   @override
   String get code => 'too-many-requests';
 
-  ///
+  /// Creates an instance of [TooManyRequestsFailure].
   const TooManyRequestsFailure({
     super.parentException,
     super.stackTrace,
@@ -138,7 +138,7 @@ final class NetworkRequestFailedFailure extends AuthFailure {
   @override
   String get code => 'network-request-failed';
 
-  ///
+  /// Creates an instance of [NetworkRequestFailedFailure].
   const NetworkRequestFailedFailure({
     super.parentException,
     super.stackTrace,
@@ -150,10 +150,10 @@ final class UnknownAuthFailure extends AuthFailure {
   @override
   final String code;
 
-  ///
+  /// Original error message.
   final String? originalMessage;
 
-  ///
+  /// Creates an instance of [UnknownAuthFailure].
   const UnknownAuthFailure(
     this.code, {
     this.originalMessage,
