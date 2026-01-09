@@ -132,6 +132,10 @@ RUN flutter pub get
 COPY . .
 
 
+# Run code generation
+RUN dart run build_runner build --delete-conflicting-outputs
+
+
 # Build Android APK in release mode
 RUN flutter build apk --release --split-per-abi --no-tree-shake-icons
 
