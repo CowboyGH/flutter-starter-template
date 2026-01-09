@@ -4,6 +4,7 @@
 /// and provide meaningful context for application logic.
 abstract class AppFailure<T extends Object?> implements Exception {
   /// A message describing the failure.
+  /// It can be an empty string if localization occurs in the presentation layer.
   final String message;
 
   /// The original exception that caused this failure, if any.
@@ -13,5 +14,5 @@ abstract class AppFailure<T extends Object?> implements Exception {
   final StackTrace? stackTrace;
 
   /// Creates an instance of [AppFailure].
-  const AppFailure(this.parentException, this.message, this.stackTrace);
+  const AppFailure(this.message, {this.parentException, this.stackTrace});
 }

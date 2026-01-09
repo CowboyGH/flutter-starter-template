@@ -61,6 +61,7 @@ unlinked_spec.ds
 
 # Build Runner generated
 *.g.dart
+*.freezed.dart
 *.mocks.dart
 
 # Firebase related

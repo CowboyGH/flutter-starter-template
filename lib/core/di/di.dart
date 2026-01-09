@@ -1,9 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
+import '../../features/auth/data/repositories/auth_repository_impl.dart';
+import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../services/network/network_service.dart';
 import '../services/network/network_service_impl.dart';
 import '../utils/analytics/app_analytics.dart';
@@ -29,6 +33,13 @@ void setupDI() {
         ? FirebaseAnalyticsImpl(di<FirebaseAnalytics>())
         : DebugAnalyticsImpl(di<AppLogger>()),
   );
+
+  // Authentication
+  di.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+  di.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(di<AppLogger>(), di<FirebaseAuth>()),
+  );
+  di.registerLazySingleton(() => AuthBloc(di<AppAnalytics>(), di<AuthRepository>()));
 
   /// Connectivity
   di.registerLazySingleton<Connectivity>(() => Connectivity());
