@@ -153,6 +153,23 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         const SizedBox(height: 16),
                         Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context.read<AuthBloc>().add(
+                                const AuthEvent.signInWithGoogleRequested(),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: const Text('Sign In with Google'),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Center(
                           child: RichText(
                             text: TextSpan(
                               text: _isSignIn ? 'Sign Up' : 'Sign In',
