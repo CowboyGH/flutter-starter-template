@@ -42,15 +42,13 @@ class _SignInPageState extends State<SignInPage> {
                 operationInProgress: () => const Center(
                   child: CircularProgressIndicator.adaptive(),
                 ),
-                authError: (failure) => failure.toMessage(context) == null
-                    ? ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Center(
-                            child: Text(failure.toMessage(context)!),
-                          ),
-                        ),
-                      )
-                    : null,
+                authError: (failure) {
+                  final message = failure.toMessage(context);
+                  if (message == null) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Center(child: Text(message))),
+                  );
+                },
                 orElse: () => const SizedBox.shrink(),
               );
             },
