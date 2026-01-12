@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `DebugScreen` sign out action for quick manual verification.
 - Added auth-aware routing with GoRouter redirect (`/auth/*` is public, other routes require authentication).
 - Added localized authentication failure messages (ARB + `AuthFailure` → l10n mapper).
+- Added Google Sign-In authentication.
 
 ### Changed
 
