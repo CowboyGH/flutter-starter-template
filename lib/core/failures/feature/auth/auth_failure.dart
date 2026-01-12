@@ -145,6 +145,78 @@ final class NetworkRequestFailedFailure extends AuthFailure {
   }) : super('');
 }
 
+/// Operation cancelled error.
+final class OperationCancelledFailure extends AuthFailure {
+  @override
+  String get code => 'canceled';
+
+  /// Creates an instance of [OperationCancelledFailure].
+  const OperationCancelledFailure({
+    super.stackTrace,
+    super.parentException,
+  }) : super('');
+}
+
+/// Operation interrupted error.
+final class OperationInterruptedFailure extends AuthFailure {
+  @override
+  String get code => 'interrupted';
+
+  /// Creates an instance of [OperationInterruptedFailure].
+  const OperationInterruptedFailure({
+    super.stackTrace,
+    super.parentException,
+  }) : super('');
+}
+
+/// Client configuration error.
+final class ClientConfigurationFailure extends AuthFailure {
+  @override
+  String get code => 'clientConfigurationError';
+
+  /// Creates an instance of [ClientConfigurationFailure].
+  const ClientConfigurationFailure({
+    super.stackTrace,
+    super.parentException,
+  }) : super('');
+}
+
+/// Provider configuration error.
+final class ProviderConfigurationFailure extends AuthFailure {
+  @override
+  String get code => 'providerConfigurationError';
+
+  /// Creates an instance of [ProviderConfigurationFailure].
+  const ProviderConfigurationFailure({
+    super.stackTrace,
+    super.parentException,
+  }) : super('');
+}
+
+/// UI unavailable error.
+final class UIUnavailableFailure extends AuthFailure {
+  @override
+  String get code => 'uiUnavailable';
+
+  /// Creates an instance of [UIUnavailableFailure].
+  const UIUnavailableFailure({
+    super.stackTrace,
+    super.parentException,
+  }) : super('');
+}
+
+/// Operation cancelled error.
+final class UserMismatchFailure extends AuthFailure {
+  @override
+  String get code => 'userMismatch';
+
+  /// Creates an instance of [UserMismatchFailure].
+  const UserMismatchFailure({
+    super.stackTrace,
+    super.parentException,
+  }) : super('');
+}
+
 /// Unknown authentication error.
 final class UnknownAuthFailure extends AuthFailure {
   @override
