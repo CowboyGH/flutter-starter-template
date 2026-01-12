@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb;
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../core/failures/feature/auth/auth_failure.dart';
 import '../../../../core/result/result.dart';
@@ -6,6 +7,7 @@ import '../../../../core/utils/logger/app_logger.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../mappers/auth_failure_mapper.dart';
+import '../mappers/google_auth_failure_mapper.dart';
 import '../mappers/user_to_entity_mapper.dart';
 
 /// Implementation of [AuthRepository] using Firebase Authentication.
@@ -16,8 +18,11 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Firebase Authentication instance for performing auth operations.
   final fb.FirebaseAuth _auth;
 
+  /// Google Sign-In instance for handling Google authentication.
+  final GoogleSignIn _googleSignIn;
+
   /// Creates an instance of [AuthRepositoryImpl].
-  AuthRepositoryImpl(this._logger, this._auth);
+  AuthRepositoryImpl(this._logger, this._auth, this._googleSignIn);
 
   /// Validates the provided credentials before processing login or
   /// registration requests.
@@ -113,6 +118,44 @@ class AuthRepositoryImpl implements AuthRepository {
       return Result.failure(e.toAuthFailure(s));
     } catch (e, s) {
       _logger.e('SignOut failed with unexpected error', e, s);
+      return Result.failure(
+        UnknownAuthFailure(
+          'unknown',
+          originalMessage: e.toString(),
+          parentException: e,
+          stackTrace: s,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<User, AuthFailure>> signInWithGoogle() async {
+    _logger.d('SignInWithGoogle attempt');
+    try {
+      final GoogleSignInAccount googleSignInAccount = await _googleSignIn.authenticate(
+        scopeHint: ['email'],
+      );
+
+      final authClient = _googleSignIn.authorizationClient;
+      final authorization = await authClient.authorizationForScopes(['email']);
+
+      final googleAuthCredential = fb.GoogleAuthProvider.credential(
+        idToken: googleSignInAccount.authentication.idToken,
+        accessToken: authorization?.accessToken,
+      );
+
+      final credential = await _auth.signInWithCredential(googleAuthCredential);
+
+      return _validateCredential(credential, 'sign in with Google');
+    } on GoogleSignInException catch (e, s) {
+      _logger.i('SignInWithGoogle failed with Google error: ${e.code.name}', e, s);
+      return Result.failure(e.toAuthFailure(s));
+    } on fb.FirebaseAuthException catch (e, s) {
+      _logger.i('SignInWithGoogle failed with Firebase error: ${e.code}', e, s);
+      return Result.failure(e.toAuthFailure(s));
+    } catch (e, s) {
+      _logger.e('SignInWithGoogle failed with unexpected error', e, s);
       return Result.failure(
         UnknownAuthFailure(
           'unknown',
