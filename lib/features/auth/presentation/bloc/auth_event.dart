@@ -12,6 +12,9 @@ class AuthEvent with _$AuthEvent {
   /// Event to request sign-up.
   const factory AuthEvent.signUpRequested(String email, String password) = _SignUpRequested;
 
+  /// Event to request google sign-in.
+  const factory AuthEvent.signInWithGoogleRequested() = _SignInWithGoogleRequested;
+
   /// Event to request sign-out.
   const factory AuthEvent.signOutRequested() = _SignOutRequested;
 }

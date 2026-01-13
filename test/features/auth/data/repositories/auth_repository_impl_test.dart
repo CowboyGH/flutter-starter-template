@@ -7,6 +7,7 @@ import 'package:flutter_starter_template/features/auth/data/repositories/auth_re
 import 'package:flutter_starter_template/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter_template/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -15,12 +16,22 @@ import 'auth_repository_impl_test.mocks.dart';
 @GenerateNiceMocks([
   MockSpec<AppLogger>(),
   MockSpec<fb.FirebaseAuth>(),
+  MockSpec<GoogleSignIn>(),
+  MockSpec<GoogleSignInAccount>(),
+  MockSpec<GoogleSignInAuthorizationClient>(),
+  MockSpec<GoogleSignInClientAuthorization>(),
+  MockSpec<GoogleSignInAuthentication>(),
   MockSpec<fb.UserCredential>(),
   MockSpec<fb.User>(),
 ])
 void main() {
   late MockAppLogger mockLogger;
   late MockFirebaseAuth mockAuth;
+  late MockGoogleSignIn mockGoogleSignIn;
+  late MockGoogleSignInAccount mockGoogleSignInAccount;
+  late MockGoogleSignInAuthorizationClient mockGoogleSignInAuthClient;
+  late MockGoogleSignInClientAuthorization mockGoogleSignInClientAuth;
+  late MockGoogleSignInAuthentication mockGoogleSignInAuth;
   late MockUserCredential mockCredential;
   late MockUser mockUser;
   late AuthRepository repository;
@@ -28,17 +39,22 @@ void main() {
   setUp(() {
     mockLogger = MockAppLogger();
     mockAuth = MockFirebaseAuth();
+    mockGoogleSignIn = MockGoogleSignIn();
+    mockGoogleSignInAccount = MockGoogleSignInAccount();
+    mockGoogleSignInAuthClient = MockGoogleSignInAuthorizationClient();
+    mockGoogleSignInClientAuth = MockGoogleSignInClientAuthorization();
+    mockGoogleSignInAuth = MockGoogleSignInAuthentication();
     mockCredential = MockUserCredential();
     mockUser = MockUser();
-    repository = AuthRepositoryImpl(mockLogger, mockAuth);
+    repository = AuthRepositoryImpl(mockLogger, mockAuth, mockGoogleSignIn);
   });
 
   group('AuthRepositoryImpl', () {
     const String uid = 'test_uid';
     const String email = 'test@gmail.com';
     const String password = 'test_password';
-    const code = 'test_code';
-    const message = 'test_message';
+
+    const firebaseErrorCode = 'invalid-email';
 
     void arrangeSuccessfulCredential() {
       when(mockUser.uid).thenReturn(uid);
@@ -117,10 +133,7 @@ void main() {
             password: password,
           ),
         ).thenThrow(
-          fb.FirebaseAuthException(
-            code: code,
-            message: message,
-          ),
+          fb.FirebaseAuthException(code: firebaseErrorCode),
         );
 
         // Act
@@ -134,8 +147,7 @@ void main() {
         expect(result.isFailure, true);
 
         expect(failure, isA<AuthFailure>());
-        expect(failure.code, code);
-        expect(failure.message, message);
+        expect(failure.code, firebaseErrorCode);
 
         verify(
           mockAuth.signInWithEmailAndPassword(
@@ -240,10 +252,7 @@ void main() {
             password: password,
           ),
         ).thenThrow(
-          fb.FirebaseAuthException(
-            code: code,
-            message: message,
-          ),
+          fb.FirebaseAuthException(code: firebaseErrorCode),
         );
 
         // Act
@@ -254,8 +263,7 @@ void main() {
         expect(result.isFailure, true);
 
         expect(failure, isA<AuthFailure>());
-        expect(failure.code, code);
-        expect(failure.message, message);
+        expect(failure.code, firebaseErrorCode);
 
         verify(
           mockAuth.createUserWithEmailAndPassword(
@@ -311,10 +319,7 @@ void main() {
       test('should return AuthFailure when FirebaseAuthException thrown', () async {
         // Arrange
         when(mockAuth.signOut()).thenThrow(
-          fb.FirebaseAuthException(
-            code: code,
-            message: message,
-          ),
+          fb.FirebaseAuthException(code: firebaseErrorCode),
         );
 
         // Act
@@ -325,8 +330,7 @@ void main() {
         expect(result.isFailure, true);
 
         expect(failure, isA<AuthFailure>());
-        expect(failure.code, code);
-        expect(failure.message, message);
+        expect(failure.code, firebaseErrorCode);
 
         verify(mockAuth.signOut()).called(1);
         verifyNoMoreInteractions(mockAuth);
@@ -346,6 +350,155 @@ void main() {
 
         verify(mockAuth.signOut()).called(1);
         verifyNoMoreInteractions(mockAuth);
+      });
+    });
+
+    group('AuthRepositoryImpl.signInWithGoogle', () {
+      const idToken = 'test_id_token';
+      const accessToken = 'test_access_token';
+      const googleErrorCode = 'canceled';
+
+      void arrangeGoogleHappyPath(String idToken, String accessToken) {
+        when(mockGoogleSignIn.initialize()).thenAnswer((_) async {});
+        when(
+          mockGoogleSignIn.authenticate(scopeHint: anyNamed('scopeHint')),
+        ).thenAnswer((_) async => mockGoogleSignInAccount);
+        when(mockGoogleSignIn.authorizationClient).thenReturn(mockGoogleSignInAuthClient);
+
+        when(
+          mockGoogleSignInAuthClient.authorizationForScopes(any),
+        ).thenAnswer((_) async => mockGoogleSignInClientAuth);
+
+        when(mockGoogleSignInAccount.authentication).thenReturn(mockGoogleSignInAuth);
+        when(mockGoogleSignInAuth.idToken).thenReturn(idToken);
+        when(mockGoogleSignInClientAuth.accessToken).thenReturn(accessToken);
+      }
+
+      test('should return Success with User when valid credentials provided', () async {
+        // Arrange
+        arrangeSuccessfulCredential();
+        arrangeGoogleHappyPath(idToken, accessToken);
+
+        when(
+          mockAuth.signInWithCredential(any),
+        ).thenAnswer((_) async => mockCredential);
+
+        // Act
+        final result = await repository.signInWithGoogle();
+
+        // Assert
+        expect(result.isSuccess, true, reason: result.failure?.toString());
+
+        final success = result.success!;
+        expect(success.uid, uid);
+        expect(success.email, email);
+
+        verify(mockGoogleSignIn.authenticate(scopeHint: anyNamed('scopeHint'))).called(1);
+        verify(mockGoogleSignInAuthClient.authorizationForScopes(any)).called(1);
+
+        verify(mockAuth.signInWithCredential(any)).called(1);
+        verifyNoMoreInteractions(mockAuth);
+      });
+
+      test('should return UnknownAuthFailure when credential.user is null', () async {
+        // Arrange
+        arrangeNullCredential();
+        arrangeGoogleHappyPath(idToken, accessToken);
+
+        when(
+          mockAuth.signInWithCredential(any),
+        ).thenAnswer((_) async => mockCredential);
+
+        // Act
+        final result = await repository.signInWithGoogle();
+
+        // Assert
+        expect(result.isFailure, true);
+
+        final failure = result.failure!;
+        expect(failure, isA<UnknownAuthFailure>());
+
+        verify(mockGoogleSignIn.authenticate(scopeHint: anyNamed('scopeHint'))).called(1);
+        verify(mockGoogleSignInAuthClient.authorizationForScopes(any)).called(1);
+
+        verify(mockAuth.signInWithCredential(any)).called(1);
+        verifyNoMoreInteractions(mockAuth);
+      });
+
+      test(
+        'should return OperationCancelledFailure when GoogleSignInException.canceled thrown',
+        () async {
+          // Arrange
+          when(mockGoogleSignIn.initialize()).thenAnswer((_) async {});
+          when(
+            mockGoogleSignIn.authenticate(scopeHint: anyNamed('scopeHint')),
+          ).thenThrow(
+            const GoogleSignInException(code: GoogleSignInExceptionCode.canceled),
+          );
+
+          // Act
+          final result = await repository.signInWithGoogle();
+
+          // Assert
+          expect(result.isFailure, true);
+
+          final failure = result.failure!;
+          expect(failure, isA<OperationCancelledFailure>());
+          expect(failure.code, googleErrorCode);
+
+          verify(mockGoogleSignIn.authenticate(scopeHint: anyNamed('scopeHint'))).called(1);
+          verifyNever(mockAuth.signInWithCredential(any));
+        },
+      );
+
+      test(
+        'should return InvalidEmailFailure when FirebaseAuthException.invalid-email thrown',
+        () async {
+          // Arrange
+          arrangeGoogleHappyPath(idToken, accessToken);
+
+          when(
+            mockAuth.signInWithCredential(any),
+          ).thenThrow(
+            fb.FirebaseAuthException(code: firebaseErrorCode),
+          );
+
+          // Act
+          final result = await repository.signInWithGoogle();
+
+          // Assert
+          expect(result.isFailure, true);
+
+          final failure = result.failure!;
+          expect(failure, isA<InvalidEmailFailure>());
+          expect(failure.code, firebaseErrorCode);
+
+          verify(mockGoogleSignIn.authenticate(scopeHint: anyNamed('scopeHint'))).called(1);
+          verify(mockAuth.signInWithCredential(any)).called(1);
+        },
+      );
+
+      test('should return UnknownAuthFailure when unexpected error thrown', () async {
+        // Arrange
+        when(mockGoogleSignIn.initialize()).thenAnswer((_) async {});
+        when(
+          mockGoogleSignIn.authenticate(scopeHint: anyNamed('scopeHint')),
+        ).thenThrow(const Object());
+
+        when(
+          mockAuth.signInWithCredential(any),
+        ).thenAnswer((_) async => mockCredential);
+
+        // Act
+        final result = await repository.signInWithGoogle();
+
+        // Assert
+        expect(result.isFailure, true);
+
+        final failure = result.failure!;
+        expect(failure, isA<UnknownAuthFailure>());
+
+        verify(mockGoogleSignIn.authenticate(scopeHint: anyNamed('scopeHint'))).called(1);
       });
     });
 

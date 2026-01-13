@@ -210,5 +210,54 @@ void main() {
         },
       );
     });
+
+    group('AuthBloc._onSignInWithGoogleRequested', () {
+      blocTest(
+        'emits authenticated when authStateChanges emits user on sign in with google',
+        build: () => authBloc,
+        setUp: () => when(mockRepository.signInWithGoogle()).thenAnswer(
+          (_) async => const Success(user),
+        ),
+        act: (bloc) async {
+          bloc.add(const AuthEvent.signInWithGoogleRequested());
+          await pumpEventQueue();
+
+          authController.add(user);
+          await pumpEventQueue();
+        },
+        expect: () => [
+          const AuthState.operationInProgress(),
+          const AuthState.authenticated(user),
+        ],
+        verify: (bloc) {
+          verify(mockRepository.signInWithGoogle()).called(1);
+          verifyRepository();
+
+          verify(mockAnalytics.logEvent('signInWithGoogleRequested')).called(1);
+          verify(mockAnalytics.logEvent('signInWithGoogleCompleted')).called(1);
+          verifyNoMoreInteractions(mockAnalytics);
+        },
+      );
+
+      blocTest(
+        'emits authError on sign in with google failure',
+        build: () => authBloc,
+        setUp: () => when(mockRepository.signInWithGoogle()).thenAnswer(
+          (_) async => const Failure(authFailure),
+        ),
+        act: (bloc) async => bloc.add(const AuthEvent.signInWithGoogleRequested()),
+        expect: () => [
+          const AuthState.operationInProgress(),
+          const AuthState.authError(authFailure),
+        ],
+        verify: (bloc) {
+          verify(mockRepository.signInWithGoogle()).called(1);
+          verifyRepository();
+
+          verify(mockAnalytics.logEvent('signInWithGoogleRequested')).called(1);
+          verifyNoMoreInteractions(mockAnalytics);
+        },
+      );
+    });
   });
 }

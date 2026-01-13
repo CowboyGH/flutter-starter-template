@@ -42,13 +42,13 @@ class _SignInPageState extends State<SignInPage> {
                 operationInProgress: () => const Center(
                   child: CircularProgressIndicator.adaptive(),
                 ),
-                authError: (failure) => ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Center(
-                      child: Text(failure.toMessage(context)),
-                    ),
-                  ),
-                ),
+                authError: (failure) {
+                  final message = failure.toMessage(context);
+                  if (message == null) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Center(child: Text(message))),
+                  );
+                },
                 orElse: () => const SizedBox.shrink(),
               );
             },
@@ -149,6 +149,23 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                             ),
                             child: _isSignIn ? const Text('Sign In') : const Text('Sign Up'),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context.read<AuthBloc>().add(
+                                const AuthEvent.signInWithGoogleRequested(),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: const Text('Sign In with Google'),
                           ),
                         ),
                         const SizedBox(height: 16),

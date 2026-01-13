@@ -26,6 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
     on<_SignUpRequested>(_onSignUpRequested);
     on<_SignOutRequested>(_onSignOutRequested);
     on<_AuthStateChanged>(_onAuthStateChanged);
+    on<_SignInWithGoogleRequested>(_onSignInWithGoogleRequested);
   }
 
   final AppAnalytics _analytics;
@@ -81,6 +82,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
 
     switch (result) {
       case Success():
+        return;
+      case Failure(:final error):
+        emit(AuthState.authError(error));
+    }
+  }
+
+  Future<void> _onSignInWithGoogleRequested(
+    _SignInWithGoogleRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    await _analytics.logEvent('signInWithGoogleRequested');
+    emit(const AuthState.operationInProgress());
+
+    final result = await _repository.signInWithGoogle();
+
+    switch (result) {
+      case Success():
+        await _analytics.logEvent('signInWithGoogleCompleted');
         return;
       case Failure(:final error):
         emit(AuthState.authError(error));
