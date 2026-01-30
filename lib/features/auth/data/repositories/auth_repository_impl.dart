@@ -24,12 +24,7 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Creates an instance of [AuthRepositoryImpl].
   AuthRepositoryImpl(this._logger, this._auth, this._googleSignIn);
 
-  /// Validates the provided credentials before processing login or
-  /// registration requests.
-  ///
-  /// Returns:
-  /// - [Result.success] with a [User] object if credentials are valid
-  /// - [Result.failure] with an [AuthFailure] if validation fails
+  /// Validates credential after Firebase operation.
   Result<User, AuthFailure> _validateCredential(
     fb.UserCredential credential,
     String operation,
