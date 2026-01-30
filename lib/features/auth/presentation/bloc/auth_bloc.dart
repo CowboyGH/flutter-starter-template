@@ -52,6 +52,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
     _SignInRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (state is _AuthInProgress) return;
+
     await _analytics.logEvent('signInRequested');
     emit(const AuthState.operationInProgress());
 
@@ -73,6 +75,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
     _SignUpRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (state is _AuthInProgress) return;
+
     await _analytics.logEvent('signUpRequested');
     emit(const AuthState.operationInProgress());
 
@@ -90,6 +94,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
   }
 
   /// Handles sign-out requests.
+  ///
+  /// No need to emit loading state for sign-out,
+  /// as it is quick and handled by auth state changes.
   Future<void> _onSignOutRequested(
     _SignOutRequested event,
     Emitter<AuthState> emit,
@@ -110,6 +117,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
     _SignInWithGoogleRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (state is _AuthInProgress) return;
+
     await _analytics.logEvent('signInWithGoogleRequested');
     emit(const AuthState.operationInProgress());
 
