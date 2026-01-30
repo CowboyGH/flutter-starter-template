@@ -36,7 +36,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
   StreamSubscription<User?>? _authStateChanges;
 
   /// Handles authentication state changes.
-  void _onAuthStateChanged(_AuthStateChanged event, Emitter<AuthState> emit) {
+  void _onAuthStateChanged(
+    _AuthStateChanged event,
+    Emitter<AuthState> emit,
+  ) {
     if (event.user != null) {
       emit(AuthState.authenticated(event.user!));
     } else {
@@ -45,11 +48,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
   }
 
   /// Handles sign-in requests.
-  Future<void> _onSignInRequested(_SignInRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onSignInRequested(
+    _SignInRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     await _analytics.logEvent('signInRequested');
     emit(const AuthState.operationInProgress());
 
-    final result = await _repository.signInWithEmail(event.email, event.password);
+    final result = await _repository.signInWithEmail(
+      event.email,
+      event.password,
+    );
 
     switch (result) {
       case Success():
@@ -60,11 +69,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
   }
 
   /// Handles sign-up requests.
-  Future<void> _onSignUpRequested(_SignUpRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onSignUpRequested(
+    _SignUpRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     await _analytics.logEvent('signUpRequested');
     emit(const AuthState.operationInProgress());
 
-    final result = await _repository.signUpWithEmail(event.email, event.password);
+    final result = await _repository.signUpWithEmail(
+      event.email,
+      event.password,
+    );
 
     switch (result) {
       case Success():
@@ -75,7 +90,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
   }
 
   /// Handles sign-out requests.
-  Future<void> _onSignOutRequested(_SignOutRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onSignOutRequested(
+    _SignOutRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     await _analytics.logEvent('signOutRequested');
 
     final result = await _repository.signOut();
