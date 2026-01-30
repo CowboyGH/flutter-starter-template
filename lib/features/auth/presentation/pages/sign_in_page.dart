@@ -59,9 +59,9 @@ class _SignInPageState extends State<SignInPage> {
                           if (value == null || value.isEmpty) {
                             return 'Write your email';
                           }
-                          // if (!value.contains(RegExp(r''))) {
-                          //   return 'Incorrect email format';
-                          // }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                            return 'Incorrect email format';
+                          }
                           return null;
                         },
                         onSaved: (newValue) => _email = newValue,
@@ -85,9 +85,9 @@ class _SignInPageState extends State<SignInPage> {
                           if (value == null || value.isEmpty) {
                             return 'Write your password';
                           }
-                          // if (!value.contains(RegExp(r''))) {
-                          //   return 'Incorrect password format';
-                          // }
+                          if (value.length < 8) {
+                            return 'Password must be at least 8 characters';
+                          }
                           return null;
                         },
                         onSaved: (newValue) => _password = newValue,
