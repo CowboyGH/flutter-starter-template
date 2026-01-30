@@ -28,18 +28,17 @@ class _SignInPageState extends State<SignInPage> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              state.maybeWhen(
-                authError: (failure) {
-                  final message = failure.toMessage(context);
-                  if (message == null) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Center(child: Text(message))),
-                  );
-                },
-                orElse: () => const SizedBox.shrink(),
-              );
-            },
+            listener: (context, state) => state.maybeWhen(
+              authError: (failure) {
+                final message = failure.toMessage(context);
+                if (message == null) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Center(child: Text(message))),
+                );
+                return null;
+              },
+              orElse: () => const SizedBox.shrink(),
+            ),
             child: Column(
               mainAxisAlignment: .center,
               children: [
@@ -59,7 +58,9 @@ class _SignInPageState extends State<SignInPage> {
                           if (value == null || value.isEmpty) {
                             return 'Write your email';
                           }
-                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                          if (!RegExp(
+                            r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                          ).hasMatch(value)) {
                             return 'Incorrect email format';
                           }
                           return null;
@@ -99,11 +100,9 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                           hintText: '•' * 8,
                           suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
+                            onPressed: () => setState(
+                              () => _isPasswordVisible = !_isPasswordVisible,
+                            ),
                             icon: _isPasswordVisible
                                 ? const Icon(Icons.visibility_rounded)
                                 : const Icon(Icons.visibility_off_rounded),
@@ -141,11 +140,9 @@ class _SignInPageState extends State<SignInPage> {
                       const SizedBox(height: 16),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () {
-                            context.read<AuthBloc>().add(
-                              const AuthEvent.signInWithGoogleRequested(),
-                            );
-                          },
+                          onPressed: () => context.read<AuthBloc>().add(
+                            const AuthEvent.signInWithGoogleRequested(),
+                          ),
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(double.infinity, 50),
                             shape: RoundedRectangleBorder(
@@ -166,9 +163,13 @@ class _SignInPageState extends State<SignInPage> {
                             children: [
                               TextSpan(
                                 text: _isSignIn ? 'Sign up' : 'Sign in',
-                                style: const TextStyle(fontWeight: FontWeight.w600),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () => setState(() => _isSignIn = !_isSignIn),
+                                  ..onTap = () => setState(
+                                    () => _isSignIn = !_isSignIn,
+                                  ),
                               ),
                             ],
                           ),
