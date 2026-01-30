@@ -13,15 +13,15 @@ import 'router_paths.dart';
 
 /// Determines the redirect path based on the current [authState] and [state].
 String? _redirect(AuthState authState, GoRouterState state) {
-  final isAuth = state.matchedLocation.startsWith(AppRoutePaths.authPrefix);
+  final isAuthScreen = state.matchedLocation.startsWith(AppRoutePaths.authPrefix);
 
   return authState.maybeWhen(
     authenticated: (user) {
-      if (isAuth) return AppRoutePaths.debugPath;
+      if (isAuthScreen) return AppRoutePaths.debugPath;
       return null;
     },
     unauthenticated: () {
-      if (isAuth) return null;
+      if (isAuthScreen) return null;
       return AppRoutePaths.signInPath;
     },
     orElse: () => null,
