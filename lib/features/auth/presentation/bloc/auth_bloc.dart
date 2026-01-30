@@ -64,8 +64,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
 
     switch (result) {
       case Success():
-        return;
+        await _analytics.logEvent('signInCompleted');
       case Failure(:final error):
+        await _analytics.logEvent(
+          'authError',
+          parameters: {'code': error.code},
+        );
         emit(AuthState.authError(error));
     }
   }
@@ -87,8 +91,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
 
     switch (result) {
       case Success():
-        return;
+        await _analytics.logEvent('signUpCompleted');
       case Failure(:final error):
+        await _analytics.logEvent(
+          'authError',
+          parameters: {'code': error.code},
+        );
         emit(AuthState.authError(error));
     }
   }
@@ -107,8 +115,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
 
     switch (result) {
       case Success():
-        return;
+        await _analytics.logEvent('signOutCompleted');
       case Failure(:final error):
+        await _analytics.logEvent(
+          'authError',
+          parameters: {'code': error.code},
+        );
         emit(AuthState.authError(error));
     }
   }
@@ -127,8 +139,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
     switch (result) {
       case Success():
         await _analytics.logEvent('signInWithGoogleCompleted');
-        return;
       case Failure(:final error):
+        await _analytics.logEvent(
+          'authError',
+          parameters: {'code': error.code},
+        );
         emit(AuthState.authError(error));
     }
   }
