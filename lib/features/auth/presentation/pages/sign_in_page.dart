@@ -159,12 +159,18 @@ class _SignInPageState extends State<SignInPage> {
                       Center(
                         child: RichText(
                           text: TextSpan(
-                            text: _isSignIn ? 'Sign Up' : 'Sign In',
-                            style: const TextStyle(color: Colors.black),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => setState(() {
-                                _isSignIn = !_isSignIn;
-                              }),
+                            text: _isSignIn
+                                ? 'Don\'t have an account? '
+                                : 'Already have an account? ',
+                            style: TextStyle(color: Colors.grey[600]),
+                            children: [
+                              TextSpan(
+                                text: _isSignIn ? 'Sign up' : 'Sign in',
+                                style: const TextStyle(fontWeight: FontWeight.w600),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => setState(() => _isSignIn = !_isSignIn),
+                              ),
+                            ],
                           ),
                         ),
                       ),
