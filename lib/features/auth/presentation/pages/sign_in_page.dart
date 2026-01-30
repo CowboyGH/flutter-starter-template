@@ -16,19 +16,10 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
-
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  String? _email, _password;
 
   bool _isPasswordVisible = false;
   bool _isSignIn = true;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +52,6 @@ class _SignInPageState extends State<SignInPage> {
                       const Text('Email'),
                       const SizedBox(height: 8),
                       TextFormField(
-                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         autocorrect: false,
                         autofocus: true,
@@ -74,6 +64,7 @@ class _SignInPageState extends State<SignInPage> {
                           // }
                           return null;
                         },
+                        onSaved: (newValue) => _email = newValue,
                         decoration: InputDecoration(
                           filled: true,
                           border: OutlineInputBorder(
@@ -87,7 +78,6 @@ class _SignInPageState extends State<SignInPage> {
                       const Text('Password'),
                       const SizedBox(height: 8),
                       TextFormField(
-                        controller: _passwordController,
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: !_isPasswordVisible,
                         autocorrect: false,
@@ -100,6 +90,7 @@ class _SignInPageState extends State<SignInPage> {
                           // }
                           return null;
                         },
+                        onSaved: (newValue) => _password = newValue,
                         decoration: InputDecoration(
                           filled: true,
                           border: OutlineInputBorder(
@@ -123,16 +114,17 @@ class _SignInPageState extends State<SignInPage> {
                       Center(
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
+                            if (_formKey.currentState?.validate() == true) {
+                              _formKey.currentState!.save();
                               context.read<AuthBloc>().add(
                                 _isSignIn
                                     ? AuthEvent.signInRequested(
-                                        _emailController.text.trim(),
-                                        _passwordController.text.trim(),
+                                        _email!.trim(),
+                                        _password!.trim(),
                                       )
                                     : AuthEvent.signUpRequested(
-                                        _emailController.text.trim(),
-                                        _passwordController.text.trim(),
+                                        _email!.trim(),
+                                        _password!.trim(),
                                       ),
                               );
                             }
