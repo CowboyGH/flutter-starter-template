@@ -110,7 +110,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
     Emitter<AuthState> emit,
   ) async {
     await _analytics.logEvent('signOutRequested');
-
     final result = await _repository.signOut();
 
     switch (result) {
@@ -125,6 +124,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixin {
     }
   }
 
+  /// Handles Google sign-in requests.
   Future<void> _onSignInWithGoogleRequested(
     _SignInWithGoogleRequested event,
     Emitter<AuthState> emit,
