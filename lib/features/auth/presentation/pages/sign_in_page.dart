@@ -48,6 +48,13 @@ class _SignInPageState extends State<SignInPage> {
                   child: Column(
                     crossAxisAlignment: .start,
                     children: [
+                      Center(
+                        child: Text(
+                          _isSignIn ? 'Sign In' : 'Sign Up',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                      ),
+                      const SizedBox(height: 32),
                       const Text('Email'),
                       const SizedBox(height: 8),
                       TextFormField(
