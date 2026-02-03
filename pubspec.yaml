@@ -1,7 +1,7 @@
 name: flutter_starter_template
 description: A scalable Flutter Starter Template for building production-ready business applications.
 publish_to: 'none'
-version: 0.2.0
+version: 0.3.0
 
 environment:
   sdk: '>=3.10.0 <4.0.0'
