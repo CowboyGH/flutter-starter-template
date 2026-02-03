@@ -96,6 +96,7 @@ void main() {
           verifyRepository();
 
           verify(mockAnalytics.logEvent('signInRequested')).called(1);
+          verify(mockAnalytics.logEvent('signInCompleted')).called(1);
           verifyNoMoreInteractions(mockAnalytics);
         },
       );
@@ -116,6 +117,12 @@ void main() {
           verifyRepository();
 
           verify(mockAnalytics.logEvent('signInRequested')).called(1);
+          verify(
+            mockAnalytics.logEvent(
+              'authError',
+              parameters: {'code': authFailure.code},
+            ),
+          ).called(1);
           verifyNoMoreInteractions(mockAnalytics);
         },
       );
@@ -144,6 +151,7 @@ void main() {
           verifyRepository();
 
           verify(mockAnalytics.logEvent('signUpRequested')).called(1);
+          verify(mockAnalytics.logEvent('signUpCompleted')).called(1);
           verifyNoMoreInteractions(mockAnalytics);
         },
       );
@@ -164,6 +172,12 @@ void main() {
           verifyRepository();
 
           verify(mockAnalytics.logEvent('signUpRequested')).called(1);
+          verify(
+            mockAnalytics.logEvent(
+              'authError',
+              parameters: {'code': authFailure.code},
+            ),
+          ).called(1);
           verifyNoMoreInteractions(mockAnalytics);
         },
       );
@@ -189,6 +203,7 @@ void main() {
           verifyRepository();
 
           verify(mockAnalytics.logEvent('signOutRequested')).called(1);
+          verify(mockAnalytics.logEvent('signOutCompleted')).called(1);
           verifyNoMoreInteractions(mockAnalytics);
         },
       );
@@ -206,6 +221,12 @@ void main() {
           verifyRepository();
 
           verify(mockAnalytics.logEvent('signOutRequested')).called(1);
+          verify(
+            mockAnalytics.logEvent(
+              'authError',
+              parameters: {'code': authFailure.code},
+            ),
+          ).called(1);
           verifyNoMoreInteractions(mockAnalytics);
         },
       );
@@ -255,6 +276,12 @@ void main() {
           verifyRepository();
 
           verify(mockAnalytics.logEvent('signInWithGoogleRequested')).called(1);
+          verify(
+            mockAnalytics.logEvent(
+              'authError',
+              parameters: {'code': authFailure.code},
+            ),
+          ).called(1);
           verifyNoMoreInteractions(mockAnalytics);
         },
       );
