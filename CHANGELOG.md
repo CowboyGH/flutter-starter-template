@@ -9,6 +9,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-02-03
+
+### Added
+
+- Complete authentication system with email/password and Google Sign-In support.
+- `User` entity, `AuthRepository` (interface + Firebase impl), typed `AuthFailure` hierarchy.
+- `AuthBloc` with comprehensive unit tests for all auth flows.
+- `SignInPage` UI with sign-in/sign-up toggle, form validation, and error localization.
+- Auth-aware GoRouter routing (`/auth/*` public, others require auth).
+- Analytics logging for auth events (sign-in/up/out).
+- `DebugScreen` with sign-out for testing.
+
+### Changed
+
+- Breaking: `AppFailure` constructor: `message` now positional parameter.
+- Form handling: `TextEditingController` → `FormKey` + `onSaved()` (no `dispose()` needed).
+- Auth UI: improved toggle text clarity, added headlines/labels, RichText links.
+- Bloc: `BlocConsumer` → `BlocListener` (removed redundant loading states).
+- Auth routes now use `/auth/*` prefix consistently.
+
+### Fixed
+
+- CI/CD pipeline: added `build_runner` for Freezed codegen in Docker.
+- Prevented multiple simultaneous auth requests (button debounce).
+- Enhanced email/password validators with real regex checks.
+- Router redirect logic: clearer variable naming.
+
+### Refactored
+
+- Simplified auth repository documentation (removed verbose comments).
+- Updated `.gitignore` to exclude generated `*.freezed.dart`.
+
+### Removed
+
+- Removed unused `.gitkeep` files.
+- Removed `AsyncResult` type alias (not used in auth flow).
+
 ## [0.2.0] - 2025-12-20
 
 ### Added

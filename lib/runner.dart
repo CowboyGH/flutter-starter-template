@@ -24,7 +24,7 @@ Future<void> run() async {
       await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
 
       // Setup dependency injection
-      setupDI();
+      await setupDI();
       final logger = di<AppLogger>();
 
       // Catch errors from Flutter framework
