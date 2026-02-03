@@ -9,38 +9,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-02-03
+
 ### Added
 
-- Added `User` entity for representing authenticated user data.
-- Added `AuthRepository` interface defining contract for authentication operations.
-- Added typed authentication failures (`AuthFailure` hierarchy, including `UnknownAuthFailure`).
-- Added `AuthFailureMapper` to convert `FirebaseAuthException` to `AuthFailure`.
-- Added `UserMapper` to convert Firebase `User` to domain `User`.
-- Added `AuthRepositoryImpl` implementation using Firebase Authentication.
-- Added unit tests for `AuthRepositoryImpl` (success, Firebase exceptions, unexpected errors, auth state stream).
-- Added `AuthBloc` for authentication events/state handling.
-- Added unit tests for `AuthBloc`.
-- Added email/password auth UI (`SignInPage`) with sign in / sign up flow.
-- Added `DebugScreen` sign out action for quick manual verification.
-- Added auth-aware routing with GoRouter redirect (`/auth/*` is public, other routes require authentication).
-- Added localized authentication failure messages (ARB + `AuthFailure` → l10n mapper).
-- Added Google Sign-In authentication.
+- Complete authentication system with email/password and Google Sign-In support.
+- `User` entity, `AuthRepository` (interface + Firebase impl), typed `AuthFailure` hierarchy.
+- `AuthBloc` with comprehensive unit tests for all auth flows.
+- `SignInPage` UI with sign-in/sign-up toggle, form validation, and error localization.
+- Auth-aware GoRouter routing (`/auth/*` public, others require auth).
+- Analytics logging for auth events (sign-in/up/out).
+- `DebugScreen` with sign-out for testing.
 
 ### Changed
 
-- Changed `AppFailure` constructor: `message` is now a positional parameter (API change).
-- Updated `AppFailure` constructor to match new `AppFailure` signature.
-- Removed `AsyncResult<T>` type alias (deleted `async_result.dart`).
-- Enhanced `AuthRepositoryImpl` tests: added sign out and `authStateChanges` verifications.
-- Updated `.gitignore` to exclude generated `*.freezed.dart` files (Build Runner output).
-- Updated auth route paths to use `/auth/*` prefix.
-- Improved authentication failure documentation/comments.
-- Removed unnecessary empty `.gitkeep` files.
-- Updated Firebase dependencies to latest versions.
+- Breaking: `AppFailure` constructor: `message` now positional parameter.
+- Form handling: `TextEditingController` → `FormKey` + `onSaved()` (no `dispose()` needed).
+- Auth UI: improved toggle text clarity, added headlines/labels, RichText links.
+- Bloc: `BlocConsumer` → `BlocListener` (removed redundant loading states).
+- Auth routes now use `/auth/*` prefix consistently.
 
 ### Fixed
 
-- Fixed CI failing due to missing generated Freezed files by running `build_runner` code generation in CI/Dockerfile.
+- CI/CD pipeline: added `build_runner` for Freezed codegen in Docker.
+- Prevented multiple simultaneous auth requests (button debounce).
+- Enhanced email/password validators with real regex checks.
+- Router redirect logic: clearer variable naming.
+
+### Refactored
+
+- Simplified auth repository documentation (removed verbose comments).
+- Updated `.gitignore` to exclude generated `*.freezed.dart`.
+
+### Removed
+
+- Removed unused `.gitkeep` files.
+- Removed `AsyncResult` type alias (not used in auth flow).
 
 ## [0.2.0] - 2025-12-20
 
