@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/di/di.dart';
 import '../../core/localization/generated/app_localizations.g.dart';
 import '../../core/router/router.dart';
+import '../../uikit/themes/app_theme_data.dart';
 import '../auth/presentation/bloc/auth_bloc.dart';
 
 /// The main application widget.
@@ -17,6 +18,8 @@ class FlutterStarterTemplate extends StatelessWidget {
       create: (context) => di<AuthBloc>(),
       child: MaterialApp.router(
         routerConfig: router,
+        theme: AppThemeData.lightTheme,
+        darkTheme: AppThemeData.darkTheme,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
       ),
