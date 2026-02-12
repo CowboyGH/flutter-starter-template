@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  FLUTTER_VERSION: '3.38.4'
+  FLUTTER_VERSION: '3.41.1'
   ANDROID_SDK_VERSION: '35'
 
 jobs:
