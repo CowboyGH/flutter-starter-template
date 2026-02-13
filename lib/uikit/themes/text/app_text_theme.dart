@@ -1,9 +1,9 @@
-//ignore_for_file: public_member_api_docs
+// ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 
 import 'app_text_style.dart';
 
-/// A class that defines the text theme of the app.
+/// The text theme of the app.
 @immutable
 class AppTextTheme extends ThemeExtension<AppTextTheme> {
   /// Retrieves the [AppTextTheme] from the current [BuildContext].

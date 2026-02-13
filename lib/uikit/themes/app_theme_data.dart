@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'colors/app_color_theme.dart';
 import 'text/app_text_theme.dart';
 
-/// A class that defines the theme data of the app.
+/// The main theme data for the app.
 abstract class AppThemeData {
   static const _lightColorTheme = AppColorTheme.light();
   static const _darkColorTheme = AppColorTheme.dark();

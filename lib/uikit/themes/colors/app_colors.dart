@@ -1,7 +1,7 @@
-//ignore_for_file: public_member_api_docs
+// ignore_for_file: public_member_api_docs
 import 'dart:ui';
 
-/// A class that defines the colors used in the app.
+/// The color tokens used in the app.
 abstract class AppColors {
   static const lightPrimary = Color(0xFF2563EB);
   static const lightOnPrimary = Color(0xFFFFFFFF);

@@ -1,11 +1,12 @@
-//ignore_for_file: public_member_api_docs
+// ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
-/// A class that defines the color theme of the app.
+/// The color theme of the app.
 @immutable
 class AppColorTheme extends ThemeExtension<AppColorTheme> {
+  /// Retrieves the [AppColorTheme] from the current [BuildContext].
   static AppColorTheme of(BuildContext context) =>
       Theme.of(context).extension<AppColorTheme>() ?? _throwThemeNotFound(context);
 

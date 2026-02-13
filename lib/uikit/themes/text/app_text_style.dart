@@ -1,7 +1,7 @@
 //ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 
-/// A class that defines text style tokens used in the app.
+/// The text styles used in the app.
 abstract class AppTextStyle {
   static const display = TextStyle(
     fontSize: 28,
